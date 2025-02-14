@@ -247,7 +247,7 @@ end_date = '2025-2-13'
 
 
 df = df[(df['Fecha'] >= start_date) & (df['Fecha'] <= end_date)]
-st.write("RANGO DE ANÁLISIS")
+st.write("RANGO DE ANALISIS")
 st.markdown(
     """
 
@@ -432,3 +432,251 @@ with col2:  # Inserta la imagen en la columna central
     st.write(emoji_df)
 
 
+
+# %%
+# (NO SOPORTADO POR VISUAL STUDIO CODE)
+# Gráfica PIE de los emojis más usados
+
+# Plotear el pie de los emojis más usados -NO SOPORTADO POR VISUAL STUDIO CODE
+
+fig = px.pie(emoji_df, values='Cantidad', names=emoji_df.index, hole=.3, template='plotly_dark', color_discrete_sequence=px.colors.qualitative.Pastel2)
+
+fig.update_traces(textposition='inside', textinfo='percent+label', textfont_size=20)
+fig.update_layout(
+    title={'text': 'Emojis que más usamos bomboncito', 'y':0.96, 'x':0.5, 'xanchor': 'center'}, font=dict(size=17),
+    showlegend=False)
+
+#fig.show()
+st.plotly_chart(fig)
+
+# %%
+# MAS ACTIVOS CON PORCENTAJE DE MENSAJES
+
+# Determinar los miembros más activos del grupo
+df_MiembrosActivos = df.groupby('Miembro')['Mensaje'].count().sort_values(ascending=False).to_frame()
+df_MiembrosActivos.reset_index(inplace=True)
+df_MiembrosActivos.index = np.arange(1, len(df_MiembrosActivos)+1)
+df_MiembrosActivos['% Mensaje'] = (df_MiembrosActivos['Mensaje'] / df_MiembrosActivos['Mensaje'].sum()) * 100
+
+st.header("🐢 - Ratio de actividad de mensajes")
+
+st.write(df_MiembrosActivos)
+
+# %%
+# Separar mensajes (sin multimedia) y multimedia (stickers, fotos, videos)
+multimedia_df = df[df['Mensaje'] == '<Media omitted>']
+mensajes_df = df.drop(multimedia_df.index)
+
+# Contar la cantidad de palabras y letras por mensaje
+mensajes_df['Letras'] = mensajes_df['Mensaje'].apply(lambda s : len(s))
+mensajes_df['Palabras'] = mensajes_df['Mensaje'].apply(lambda s : len(s.split(' ')))
+mensajes_df.tail() #Muestra los últimos elementos del dataframe
+
+# %%
+# PALABRAS POR MENSAJE P1
+
+# Obtener a todos los miembros
+miembros = mensajes_df.Miembro.unique()
+
+# Crear diccionario donde se almacenará todos los datos
+dictionario = {}
+
+for i in range(len(miembros)):
+    lista = []
+    # Filtrar mensajes de un miembro en específico
+    miembro_df= mensajes_df[mensajes_df['Miembro'] == miembros[i]]
+
+    # Agregar a la lista el número total de mensajes enviados
+    lista.append(miembro_df.shape[0])
+    
+    # Agregar a la lista el número de palabras por total de mensajes (palabras por mensaje)
+    palabras_por_msj = (np.sum(miembro_df['Palabras']))/miembro_df.shape[0]
+    lista.append(palabras_por_msj)
+
+    # Agregar a la lista el número de mensajes multimedia enviados
+    multimedia = multimedia_df[multimedia_df['Miembro'] == miembros[i]].shape[0]
+    lista.append(multimedia)
+
+    # Agregar a la lista el número total de emojis enviados
+    emojis = sum(miembro_df['Emojis'].str.len())
+    lista.append(emojis)
+
+    # Agregar a la lista el número total de links enviados
+    links = sum(miembro_df['URLs'])
+    lista.append(links)
+
+    # Asignar la lista como valor a la llave del diccionario
+    dictionario[miembros[i]] = lista
+    
+#print(dictionario)
+
+# %%
+# PALABRAS POR MENSAJE P2
+
+# Convertir de diccionario a dataframe
+miembro_stats_df = pd.DataFrame.from_dict(dictionario)
+
+# Cambiar el índice por la columna agregada 'Estadísticas'
+estadísticas = ['Mensajes', 'Palabras por mensaje', 'Multimedia', 'Emojis', 'Links']
+miembro_stats_df['Estadísticas'] = estadísticas
+miembro_stats_df.set_index('Estadísticas', inplace=True)
+
+# Transponer el dataframe
+miembro_stats_df = miembro_stats_df.T
+
+#Convertir a integer las columnas Mensajes, Multimedia Emojis y Links
+miembro_stats_df['Mensajes'] = miembro_stats_df['Mensajes'].apply(int)
+miembro_stats_df['Multimedia'] = miembro_stats_df['Multimedia'].apply(int)
+miembro_stats_df['Emojis'] = miembro_stats_df['Emojis'].apply(int)
+miembro_stats_df['Links'] = miembro_stats_df['Links'].apply(int)
+miembro_stats_df = miembro_stats_df.sort_values(by=['Mensajes'], ascending=False)
+
+st.write(miembro_stats_df)
+
+# %%
+df['rangoHora'] = pd.to_datetime(df['Hora'], format='%I:%M %p')
+
+# Define a function to create the "Range Hour" column
+def create_range_hour(hour):
+    hour = pd.to_datetime(hour)  # Convertir a objeto de Python datetime si es necesario
+    start_hour = hour.hour
+    end_hour = (hour + pd.Timedelta(hours=1)).hour
+    return f'{start_hour:02d} - {end_hour:02d} h'
+
+# # Apply the function to create the "Range Hour" column
+df['rangoHora'] = df['rangoHora'].apply(create_range_hour)
+
+
+
+# %%
+df['DiaSemana'] = df['Fecha'].dt.strftime('%A')
+mapeo_dias_espanol = {'Monday': '1 Lunes','Tuesday': '2 Martes','Wednesday': '3 Miércoles','Thursday': '4 Jueves',
+                      'Friday': '5 Viernes','Saturday': '6 Sábado','Sunday': '7 Domingo'}
+df['DiaSemana'] = df['DiaSemana'].map(mapeo_dias_espanol)
+df
+
+st.write(df)
+
+st.image("Recursos/Pic/1.png")
+
+# %%
+#(NO LO SOPORTA VISUAL STUDIO CODE)
+
+# Crear una columna de 1 para realizar el conteo de mensajes
+df['# Mensajes por hora'] = 1
+
+# Sumar (contar) los mensajes que tengan la misma fecha
+mensajes_hora = df.groupby('rangoHora').count().reset_index()
+
+# Plotear la cantidad de mensajes respecto del tiempo
+fig = px.line(mensajes_hora, x='rangoHora', y='# Mensajes por hora', color_discrete_sequence=['salmon'], template='plotly_dark')
+
+# Ajustar el gráfico
+fig.update_layout(
+    title={'text': 'Mensajes con mi bombón por hora', 'y':0.96, 'x':0.5, 'xanchor': 'center'},
+    font=dict(size=17))
+fig.update_traces(mode='markers+lines', marker=dict(size=10))
+fig.update_xaxes(title_text='Rango de hora', tickangle=30)
+fig.update_yaxes(title_text='# Mensajes')
+
+#fig.show()
+
+st.header("🐢 - Gráfico por hora y día - Tendencias")
+
+st.plotly_chart(fig)
+
+# %%
+#(NO LO SOPORTA VISUAL STUDIO CODE)
+
+# Crear una columna de 1 para realizar el conteo de mensajes
+df['# Mensajes por día'] = 1
+
+# Sumar (contar) los mensajes que tengan la misma fecha
+date_df = df.groupby('DiaSemana').count().reset_index()
+
+
+# Plotear la cantidad de mensajes respecto del tiempo
+fig = px.line(date_df, x='DiaSemana', y='# Mensajes por día', color_discrete_sequence=['salmon'], template='plotly_dark')
+
+# Ajustar el gráfico
+fig.update_layout(
+    title={'text': 'Mensajes con mi bombón por día', 'y':0.96, 'x':0.5, 'xanchor': 'center'},
+    font=dict(size=17))
+fig.update_traces(mode='markers+lines', marker=dict(size=10))
+fig.update_xaxes(title_text='Día', tickangle=30)
+fig.update_yaxes(title_text='# Mensajes')
+
+#fig.show()
+st.plotly_chart(fig)
+
+# %%
+#(NO LO SOPORTA VISUAL STUDIO CODE)
+
+# Crear una columna de 1 para realizar el conteo de mensajes
+df['# Mensajes por día'] = 1
+
+# Sumar (contar) los mensajes que tengan la misma fecha
+date_df = df.groupby('Fecha').sum().reset_index()
+
+# Plotear la cantidad de mensajes respecto del tiempo
+fig = px.line(date_df, x='Fecha', y='# Mensajes por día', color_discrete_sequence=['salmon'], template='plotly_dark')
+
+# Ajustar el gráfico
+#fig.update_layout(
+#    title={'text': 'Mensajes con mi Bombón a lo largo del tiempo', 'y':0.96, 'x':0.5, 'xanchor': 'center'},
+#    font=dict(size=17))
+fig.update_xaxes(title_text='Fecha', tickangle=45, nticks=35)
+fig.update_yaxes(title_text='# Mensajes')
+#fig.show()
+st.plotly_chart(fig)
+
+# %%
+start_date2 = '2024-12-21'
+end_date2 = '2024-12-28'
+
+word_df = mensajes_df[(mensajes_df['Fecha'] >= start_date2) & (mensajes_df['Fecha'] <= end_date2)]
+
+st.header("🐢 - Mapeado de palabras más usadas en forma de tortuguita")
+
+# %%
+# Crear un string que contendrá todas las palabras
+total_palabras = ' '
+stopwords = STOPWORDS.update(['que', 'qué', 'con', 'de', 'te', 'en', 'la', 'lo', 'le', 'el', 'las', 'los', 'les', 'por', 'es',
+                              'son', 'se', 'para', 'un', 'una', 'chicos', 'su', 'si', 'chic','nos', 'ya', 'hay', 'esta',
+                              'pero', 'del', 'mas', 'más', 'eso', 'este', 'como', 'así', 'todo', 'https','Multimedia', 'omitido',
+                              'y', 'mi', 'o', 'q', 'yo', 'al', 'editó', 'mensaje', 'eliminó', 'ni', 'fue', 'ere', 'sin', 'ese', 'estoy', 'ves', 'tu'])
+
+mask1 = np.array(Image.open('Recursos/Siluetas/tortuga1.jpg'))
+mask2 = np.array(Image.open('Recursos/Siluetas/heart.jpg'))
+
+# Obtener y acumular todas las palabras de cada mensaje
+for mensaje in word_df['Mensaje'].values:
+    palabras = str(mensaje).lower().split() # Obtener las palabras de cada línea del txt
+    for palabra in palabras:
+        total_palabras = total_palabras + palabra + ' ' # Acumular todas las palabras
+
+wordcloud1 = WordCloud(width = 800, height = 800, background_color ='black', stopwords = stopwords,
+                      max_words=200, min_font_size = 5,
+                      mask = mask1, colormap='BuGn',).generate(total_palabras)
+
+wordcloud2 = WordCloud(width = 800, height = 800, background_color ='black', stopwords = stopwords,
+                      max_words=200, min_font_size = 5,
+                      mask = mask2, colormap='OrRd',).generate(total_palabras)
+
+# Plotear la nube de palabras más usadas
+#wordcloud1.to_image()
+st.image(wordcloud1.to_array(), caption='☁️ Tortuga', use_container_width=True)
+
+st.image("Recursos/Meta/2.png")
+
+st.header("🐢 - Mapeado de palabras más usadas en forma de corazón")
+
+# %%
+#wordcloud2.to_image()
+
+st.image(wordcloud2.to_array(), caption='☁️ Corazon', use_container_width=True)
+
+
+st.image("Recursos/Meta/4.png")
+
+st.title("Te amo mucho bombón ")
