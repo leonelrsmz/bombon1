@@ -35,7 +35,7 @@ st.markdown(
 
 
 
-
+st.image("Recursos/Iconos/myl2.png")
 
 st.title("CVersion 2")
 st.header("header")
