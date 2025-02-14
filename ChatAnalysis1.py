@@ -247,7 +247,7 @@ end_date = '2025-2-13'
 
 
 df = df[(df['Fecha'] >= start_date) & (df['Fecha'] <= end_date)]
-st.write("RANGO DE ANALISIS")
+st.write("RANGO DE ANÁLISIS")
 st.markdown(
     """
 
