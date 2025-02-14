@@ -35,20 +35,64 @@ st.markdown(
 
 
 
-st.image("Recursos/Iconos/myl2.png")
 
-st.title("CVersion 2")
-st.header("header")
+col1, col2, col3 = st.columns([1, 1, 1])  # Crea 3 columnas, la central es el doble de ancha
+
+with col1:
+    st.markdown(
+        """
+        <p style="text-align: center; align-items: center;">❤️🖤</p>
+        """,
+    
+        unsafe_allow_html=True,
+    )
+
+with col2:  # Inserta la imagen en la columna central
+    st.image("Recursos/Iconos/myl.png", width=100,use_container_width=True )
+
+with col3:
+    st.markdown(
+        """
+        <p style="text-align: center; align-items: center;">🖤❤️</p>
+        """,
+
+        unsafe_allow_html=True,
+    )  
+
+
+
 
 
 st.markdown(
     """
-    <div class="fade-in">
-  Este texto se desvanecerá al cargar la página.
-</div>
+
 
 <style>
-.fade-in {
+.fade-in1 {
+  opacity: 0; /* Inicialmente oculto */
+  animation: fadeIn 5s ease-in-out forwards; /* Animación al cargar */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+
+<div class="fade-in1">
+  <h1 style="align-items: center; text-align: center;">Mi bombón sabor 🍓</h1>
+</div>
+    """,
+    
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+
+
+<style>
+.fade-in2 {
   opacity: 0; /* Inicialmente oculto */
   animation: fadeIn 10s ease-in-out forwards; /* Animación al cargar */
 }
@@ -58,21 +102,60 @@ st.markdown(
   to { opacity: 1; }
 }
 </style>
-<div class="fade-in">
-  Este texto se desvanecerá al cargar la página.
+
+<div class="fade-in2">
+  <p style="align-items: center; text-align: center;">En cualquier parte que estés, si te sientes feliz, emocionada, triste o si sólo quieres recordar nuestra hermosa relación, te regalo este espacio virtual que creé exclusivamente para ti <strong>Mi Bombón</strong></p>
 </div>
     """,
     
     unsafe_allow_html=True,
 )
 
-col1, col2 = st.columns([1, 2])
+
+col1, col2, col3 = st.columns([1, 1, 1])  # Crea 3 columnas, la central es el doble de ancha
 
 with col1:
-  st.image("Recursos/Pic/1.png")
+    st.write()
 
-with col2:
-  st.image("Recursos/Pic/3.png")
+with col2:  # Inserta la imagen en la columna central
+    st.image("Recursos/Pic/3.png", width=500,use_container_width=True )
+
+with col3:
+    st.write()
+
+
+st.markdown(
+    """
+
+
+<style>
+.fade-in2 {
+  opacity: 0; /* Inicialmente oculto */
+  animation: fadeIn 10s ease-in-out forwards; /* Animación al cargar */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+
+<div class="fade-in2">
+  <p> 🐢Cada cimiento de esta plataforma la construí con mucha dedicación y amor, esto sólo es el principio de muchas cosas interesantes que quiero mostrarte a través de este espacio y mostrarte algunas habilidades que recientemente he aprendido relacionada con la analítica de datos.🐢</p>
+</div>
+    """,
+    
+    unsafe_allow_html=True,
+)
+
+
+if st.button("Mostrar dedicatoria",type="primary", use_container_width=True):
+    st.write("Para mí, el utilizar los conocimientos sobre la analítica de datos para mostrar datos interesantes sobre muchos aspectos de la vida que pueden ser útiles para mejorar, la asimilo como una herramienta fundamental para mi y los grandes proyectos que quiero lograr. Crear fue espacio es terapéutico para mí porque, al mismo tiempo que pongo en práctica algunas cosas nuevas que voy aprendiendo, me sirve como relajación y un reto mental demandante.")
+
+st.header("Análisis de nuestro Chat de Whatsapp 💬")
+
+st.write("Te quiero presentar la primera sección de esta plataforma 🤩 (La cual iré actualizando con el tiempo), esta sección consiste en un proyecto que programé para analizar los datos de TODO nuestro chat de WhatsApp, desde el primer mensaje que te envié, hasta el último. Es algo totalmente nuevo para mí y por eso espero me falta mejorar, pero por el momento espero te guste")
+
 
 
 
@@ -155,14 +238,65 @@ df.reset_index(drop=True, inplace=True)
 #DEFINICIÓN DE RANGO DE FECHAS DE ANALISIS
 
 #Fecha inicio - Fin (Año, Mes, Día)
-start_date = '2024-10-15'
-end_date = '2024-12-28'
+#start_date = '2023-10-15'
+#end_date = '2024-12-28'
+
+start_date = '2023-9-16'
+end_date = '2025-2-13'
 
 
 
 df = df[(df['Fecha'] >= start_date) & (df['Fecha'] <= end_date)]
+st.write("RANGO DE ANALISIS")
+st.markdown(
+    """
 
-st.write(df)
+<div class="fade-in2">
+  <p style="align-items: center; text-align: center;"><strong>Inicio</strong></p>
+</div>
+    """,
+    
+    unsafe_allow_html=True,
+)
+st.write(df.head(1))
+st.markdown(
+    """
+
+<div class="fade-in2">
+  <p style="align-items: center; text-align: center;"><strong>Fin</strong></p>
+</div>
+    """,
+    
+    unsafe_allow_html=True,
+)
+st.write(df.tail(1))
+
+start_color, end_color = st.select_slider(
+    "Rango de fechas de analisis",
+    options=[
+        "Septiembre 2023",
+        "Octubre 2023",
+        "Noviembre 2023",
+        "Diciembre 2023",
+        "Enero 2024",
+        "Febrero 2024",
+        "Marzo 2024",
+        "Abril 2024",
+        "Mayo 2024",
+        "Junio 2024",
+        "Julio 2024",
+        "Agosto 2024",
+        "Septiembre 2024",
+        "Octubre 2024",
+        "Noviembre 2024",
+        "Diciembre 2024",
+        "Enero 2025",
+        "Febrero 2025",
+    ],
+    value=("Septiembre 2023", "Febrero 2025"),
+)
+st.write("Selección de fechas de ", start_color, "a", end_color, " (Próximamente bb) 😁 ")
+
 
 # %%
 #CONTEO
@@ -224,7 +358,54 @@ estadistica_df = pd.DataFrame(estadistica_dict, columns = ['Tipo', 'Cantidad'])
 # Establecer la columna Tipo como índice
 estadistica_df = estadistica_df.set_index('Tipo')
 
-st.write(estadistica_df)
+
+
+st.subheader("🐢 - Conteo de cosas importantes para nosotros")
+
+col1, col2 = st.columns([2, 1])  # Crea 3 columnas, la central es el doble de ancha
+
+with col1:
+    st.write("Veces que nos hemos dicho Te amo:")
+    st.write(teAmos, " Te amo's ❤️")
+
+with col2:  # Inserta la imagen en la columna central
+    st.image("Recursos/Iconos/myl2.png", width=200,use_container_width=True )
+
+
+col1, col2 = st.columns([2, 1])  # Crea 3 columnas, la central es el doble de ancha
+
+with col1:
+    st.write("Veces que nos hemos hemos deseado Buenas noches 🌕")
+    st.write(noches, " Buenas noches (Puede variar por las mayúsculas)",)
+
+with col2:  # Inserta la imagen en la columna central
+    st.image("Recursos/Iconos/luna.png", width=200,use_container_width=True )
+
+
+col1, col2 = st.columns([2, 1])  # Crea 3 columnas, la central es el doble de ancha
+
+with col1:
+    st.write("Veces que te he consentido pidiendote Uber Eats 😋")
+    st.write(ubereats, " Pedidos con dedicatoria especial",)
+
+with col2:  # Inserta la imagen en la columna central
+    st.image("Recursos/Iconos/ubereats.png", width=200,use_container_width=True )
+
+
+col1, col2 = st.columns([2, 1])  # Crea 3 columnas, la central es el doble de ancha
+
+with col1:
+    st.write("Veces que nos hemos dicho lo que nos encanta de nosotros ❤️")
+    st.write(ubereats, " Veces que nos hemos dicho lo que nos gusta el uno del otro",)
+
+with col2:  # Inserta la imagen en la columna central
+    st.image("Recursos/Pic/2.png", width=200,use_container_width=True )
+
+
+
+
+
+
 
 # %%
 #LISTA DE EMOJIS MÁS USADOS
@@ -240,9 +421,17 @@ emoji_df = pd.DataFrame(emoji_diccionario, columns=['Emoji', 'Cantidad'])
 # Establecer la columna Emoji como índice
 emoji_df = emoji_df.set_index('Emoji').head(10)
 
-print('Número emojis únicos usados: ', len(emoji_df), '\n')
+st.subheader("🐢 - Emojis y contador")
 
-st.write(emoji_df)
+col1, col2 = st.columns([2, 1])  # Crea 3 columnas, la central es el doble de ancha
+
+with col1:
+    st.write(estadistica_df)
+
+with col2:  # Inserta la imagen en la columna central
+    st.write(emoji_df)
+
+
 
 # %%
 # (NO SOPORTADO POR VISUAL STUDIO CODE)
@@ -254,7 +443,7 @@ fig = px.pie(emoji_df, values='Cantidad', names=emoji_df.index, hole=.3, templat
 
 fig.update_traces(textposition='inside', textinfo='percent+label', textfont_size=20)
 fig.update_layout(
-    title={'text': 'Emojis que más usamos', 'y':0.96, 'x':0.5, 'xanchor': 'center'}, font=dict(size=17),
+    title={'text': 'Emojis que más usamos bomboncito', 'y':0.96, 'x':0.5, 'xanchor': 'center'}, font=dict(size=17),
     showlegend=False)
 
 #fig.show()
@@ -268,6 +457,8 @@ df_MiembrosActivos = df.groupby('Miembro')['Mensaje'].count().sort_values(ascend
 df_MiembrosActivos.reset_index(inplace=True)
 df_MiembrosActivos.index = np.arange(1, len(df_MiembrosActivos)+1)
 df_MiembrosActivos['% Mensaje'] = (df_MiembrosActivos['Mensaje'] / df_MiembrosActivos['Mensaje'].sum()) * 100
+
+st.header("🐢 - Ratio de actividad de mensajes")
 
 st.write(df_MiembrosActivos)
 
@@ -356,7 +547,6 @@ def create_range_hour(hour):
 df['rangoHora'] = df['rangoHora'].apply(create_range_hour)
 
 
-st.write(df)
 
 # %%
 df['DiaSemana'] = df['Fecha'].dt.strftime('%A')
@@ -366,6 +556,9 @@ df['DiaSemana'] = df['DiaSemana'].map(mapeo_dias_espanol)
 df
 
 st.write(df)
+
+st.image("Recursos/Pic/1.png")
+
 # %%
 #(NO LO SOPORTA VISUAL STUDIO CODE)
 
@@ -387,6 +580,8 @@ fig.update_xaxes(title_text='Rango de hora', tickangle=30)
 fig.update_yaxes(title_text='# Mensajes')
 
 #fig.show()
+
+st.header("🐢 - Gráfico por hora y día - Tendencias")
 
 st.plotly_chart(fig)
 
@@ -441,7 +636,7 @@ end_date2 = '2024-12-28'
 
 word_df = mensajes_df[(mensajes_df['Fecha'] >= start_date2) & (mensajes_df['Fecha'] <= end_date2)]
 
-word_df
+st.header("🐢 - Mapeado de palabras más usadas en forma de tortuguita")
 
 # %%
 # Crear un string que contendrá todas las palabras
@@ -472,6 +667,9 @@ wordcloud2 = WordCloud(width = 800, height = 800, background_color ='black', sto
 #wordcloud1.to_image()
 st.image(wordcloud1.to_array(), caption='☁️ Tortuga', use_container_width=True)
 
+st.image("Recursos/Meta/2.png")
+
+st.header("🐢 - Mapeado de palabras más usadas en forma de corazón")
 
 # %%
 #wordcloud2.to_image()
@@ -479,3 +677,6 @@ st.image(wordcloud1.to_array(), caption='☁️ Tortuga', use_container_width=Tr
 st.image(wordcloud2.to_array(), caption='☁️ Corazon', use_container_width=True)
 
 
+st.image("Recursos/Meta/4.png")
+
+st.title("Te amo mucho bombón ")
