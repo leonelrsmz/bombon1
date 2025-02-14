@@ -15,7 +15,7 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 from PIL import Image
 from wordcloud import WordCloud, STOPWORDS
-
+import seaborn as sns
 
 import streamlit as st
 
@@ -38,7 +38,7 @@ st.markdown(
 
 
 
-st.title("Prueba1")
+st.title("CVersion 2")
 st.header("header")
 
 
