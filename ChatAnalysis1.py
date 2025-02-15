@@ -151,7 +151,7 @@ st.markdown(
 
 
 if st.button("Sesiom de fotos 14 de febrero"):
-    webbrowser.open_new_tab(https://drive.google.com/drive/folders/12R8i-xc93df4KTnAfnnCbSQ4RfA7yj3B?usp=drive_link)
+    webbrowser.open_new_tab("https://drive.google.com/drive/folders/12R8i-xc93df4KTnAfnnCbSQ4RfA7yj3B?usp=drive_link")
 
 
 if st.button("Mostrar dedicatoria",type="primary", use_container_width=True):
