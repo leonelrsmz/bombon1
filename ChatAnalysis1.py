@@ -150,9 +150,9 @@ st.markdown(
 
 
 
-if st.button("Sesiom de fotos 14 de febrero"):
-    webbrowser.open_new_tab("https://drive.google.com/drive/folders/12R8i-xc93df4KTnAfnnCbSQ4RfA7yj3B?usp=drive_link")
-
+url = "https://drive.google.com/drive/folders/12R8i-xc93df4KTnAfnnCbSQ4RfA7yj3B?usp=drive_link"
+texto_boton = "Sesion de fotos San Valentim"
+st.markdown(f'<a href="{url}" target="_blank">{texto_boton}</a>', unsafe_allow_html=True)
 
 if st.button("Mostrar dedicatoria",type="primary", use_container_width=True):
     st.write("Para mí, el utilizar los conocimientos sobre la analítica de datos para mostrar datos interesantes sobre muchos aspectos de la vida que pueden ser útiles para mejorar, la asimilo como una herramienta fundamental para mi y los grandes proyectos que quiero lograr. Crear fue espacio es terapéutico para mí porque, al mismo tiempo que pongo en práctica algunas cosas nuevas que voy aprendiendo, me sirve como relajación y un reto mental demandante.")
